@@ -44,17 +44,28 @@ function class:remove_node(uid)
   self.ps[uid] = nil
 end
 
+function class:parent_node(uid)
+  return self.p[uid]
+end
+
+function class:next_sibling_node(uid)
+  return self.ns[uid]
+end
+
+function class:prev_sibling_node(uid)
+  return self.ps[uid]
+end
+
 function class:append_child(uid, vid)
   local p = self.p
   local c = self.c
-  local ns = self.ns
-  local ps = self.ps
-  assert(p[vid] == 0)
   p[vid] = uid
   local next_id = c[uid]
   if next_id == 0 then
     c[uid] = vid
   else
+    local ns = self.ns
+    local ps = self.ps
     local prev_id = ps[next_id]
     ns[prev_id] = vid
     ns[vid] = next_id
@@ -65,11 +76,8 @@ end
 
 function class:insert_child(uid, vid)
   local p = self.p
-  local c = self.c
   local ns = self.ns
   local ps = self.ps
-  assert(p[uid] ~= 0)
-  assert(p[vid] == 0)
   p[vid] = p[uid]
   local next_id = uid
   local prev_id = ps[next_id]
@@ -79,19 +87,17 @@ function class:insert_child(uid, vid)
   ps[next_id] = vid
 end
 
-function class:remove_child(uid, vid)
+function class:remove_child(vid)
   local p = self.p
   local c = self.c
   local ns = self.ns
-  local ps = self.ps
-  assert(uid ~= 0)
-  assert(p[vid] == uid)
+  local uid = p[vid]
   p[vid] = 0
   local next_id = ns[vid]
   if next_id == vid then
-    assert(c[uid] == vid)
     c[uid] = 0
   else
+    local ps = self.ps
     if c[uid] == vid then
       c[uid] = next_id
     end
@@ -102,8 +108,7 @@ function class:remove_child(uid, vid)
 end
 
 function class:each_child(uid)
-  local c = self.c
-  local start_id = c[uid]
+  local start_id = self.c[uid]
   if start_id == 0 then
     return function () end
   else
@@ -111,27 +116,28 @@ function class:each_child(uid)
     return coroutine.wrap(function ()
       local vid = start_id
       repeat
+        local next_id = ns[vid]
         coroutine.yield(vid)
-        vid = ns[vid]
+        vid = next_id
       until vid == start_id
     end)
   end
 end
 
-function class:parent(id)
-  return self.p[id]
-end
-
-function class:child(id)
-  return self.c[id]
-end
-
-function class:next_sibling(id)
-  return self.ns[id]
-end
-
-function class:prev_sibling(uid)
-  return self.ps[id]
+function class:count_child(uid)
+  local start_id = self.c[uid]
+  if start_id == 0 then
+    return 0
+  else
+    local ns = self.ns
+    local count = 0
+    local vid = start_id
+    repeat
+      count = count + 1
+      vid = ns[vid]
+    until vid == start_id
+    return count
+  end
 end
 
 local metatable = {
