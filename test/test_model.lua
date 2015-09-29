@@ -30,30 +30,30 @@ local n4 = tree:create_node()
 local n5 = tree:create_node()
 local n6 = tree:create_node()
 
-tree:append_child(root, n1)
-tree:append_child(root, n2)
-tree:append_child(root, n3)
-tree:append_child(root, n4)
-assert(tree:count_child(root) == 4)
+tree:append(root, n1)
+tree:append(root, n2)
+tree:append(root, n3)
+tree:append(root, n4)
+assert(tree:count(root) == 4)
 
-tree:append_child(n1, tree:create_node())
-tree:append_child(n1, tree:create_node())
-assert(tree:count_child(n1) == 2)
-tree:append_child(n2, tree:create_node())
-tree:append_child(n2, tree:create_node())
-assert(tree:count_child(n2) == 2)
-tree:append_child(n3, tree:create_node())
-tree:append_child(n3, tree:create_node())
-assert(tree:count_child(n3) == 2)
-tree:append_child(n4, tree:create_node())
-tree:append_child(n4, tree:create_node())
-assert(tree:count_child(n4) == 2)
+tree:append(n1, tree:create_node())
+tree:append(n1, tree:create_node())
+assert(tree:count(n1) == 2)
+tree:append(n2, tree:create_node())
+tree:append(n2, tree:create_node())
+assert(tree:count(n2) == 2)
+tree:append(n3, tree:create_node())
+tree:append(n3, tree:create_node())
+assert(tree:count(n3) == 2)
+tree:append(n4, tree:create_node())
+tree:append(n4, tree:create_node())
+assert(tree:count(n4) == 2)
 
-tree:remove_child(n3)
-assert(tree:count_child(root) == 3)
+tree:remove(n3)
+assert(tree:count(root) == 3)
 
 local data = sequence()
-for v in tree:each_child(root) do
+for v in tree:each(root) do
   sequence:push(v)
 end
 assert(equal(data, { n1, n2, n4 }))
@@ -62,19 +62,21 @@ assert(tree:parent_node(n2) == root)
 assert(tree:next_sibling_node(n2) == n4)
 assert(tree:prev_sibling_node(n2) == n1)
 
-tree:insert_child(n2, n5)
+tree:insert(n2, n5)
 local data = sequence()
-for v in tree:each_child(root) do
+for v in tree:each(root) do
   sequence:push(v)
 end
 assert(equal(data, { n1, n5, n2, n4 }))
 
-tree:insert_child(n1, n6)
+tree:insert(n1, n6)
 local data = sequence()
-for v in tree:each_child(root) do
+for v in tree:each(root) do
   sequence:push(v)
 end
 assert(equal(data, { n6, n1, n5, n2, n4 }))
+
+tree:delete_node(n3)
 
 local m = 0
 local n = 0
@@ -82,6 +84,6 @@ for u in tree:each_node() do
   m = m + u
   n = n + 1
 end
-assert(m == 120)
-assert(n == 15)
+assert(m == 116)
+assert(n == 14)
 
