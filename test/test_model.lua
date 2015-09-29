@@ -16,75 +16,71 @@
 -- along with dromozoa-tree.  If not, see <http://www.gnu.org/licenses/>.
 
 local equal = require "dromozoa.commons.equal"
-local json = require "dromozoa.commons.json"
 local sequence = require "dromozoa.commons.sequence"
 local model = require "dromozoa.tree.model"
 
-local tree = model()
+local t = model()
 
-local root = tree:create_node()
+local root = t:create_node()
+local n1 = t:create_node()
+local n2 = t:create_node()
+local n3 = t:create_node()
+local n4 = t:create_node()
+local n5 = t:create_node()
+local n6 = t:create_node()
 
-local n1 = tree:create_node()
-local n2 = tree:create_node()
-local n3 = tree:create_node()
-local n4 = tree:create_node()
-local n5 = tree:create_node()
-local n6 = tree:create_node()
+t:append_child(root, n1)
+t:append_child(root, n2)
+t:append_child(root, n3)
+t:append_child(root, n4)
+assert(t:count_children(root) == 4)
 
-tree:append_child(root, n1)
-tree:append_child(root, n2)
-tree:append_child(root, n3)
-tree:append_child(root, n4)
-assert(tree:count_children(root) == 4)
+t:append_child(n1, t:create_node())
+t:append_child(n1, t:create_node())
+assert(t:count_children(n1) == 2)
+t:append_child(n2, t:create_node())
+t:append_child(n2, t:create_node())
+assert(t:count_children(n2) == 2)
+t:append_child(n3, t:create_node())
+t:append_child(n3, t:create_node())
+assert(t:count_children(n3) == 2)
+t:append_child(n4, t:create_node())
+t:append_child(n4, t:create_node())
+assert(t:count_children(n4) == 2)
 
-tree:append_child(n1, tree:create_node())
-tree:append_child(n1, tree:create_node())
-assert(tree:count_children(n1) == 2)
-tree:append_child(n2, tree:create_node())
-tree:append_child(n2, tree:create_node())
-assert(tree:count_children(n2) == 2)
-tree:append_child(n3, tree:create_node())
-tree:append_child(n3, tree:create_node())
-assert(tree:count_children(n3) == 2)
-tree:append_child(n4, tree:create_node())
-tree:append_child(n4, tree:create_node())
-assert(tree:count_children(n4) == 2)
-
-tree:remove_node(n3)
-assert(tree:count_children(root) == 3)
+t:remove_node(n3)
+assert(t:count_children(root) == 3)
 
 local data = sequence()
-for v in tree:each_child(root) do
+for v in t:each_child(root) do
   data:push(v)
 end
 assert(equal(data, { n1, n2, n4 }))
 
-assert(tree:parent_node(n2) == root)
-assert(tree:next_sibling_node(n2) == n4)
-assert(tree:prev_sibling_node(n2) == n1)
+assert(t:parent_node(n2) == root)
+assert(t:next_sibling_node(n2) == n4)
+assert(t:prev_sibling_node(n2) == n1)
 
-tree:insert_before(n5, n2)
+t:insert_before(n5, n2)
 local data = sequence()
-for v in tree:each_child(root) do
+for v in t:each_child(root) do
   print(v)
   data:push(v)
 end
 assert(equal(data, { n1, n5, n2, n4 }))
 
-tree:insert_before(n6, n1)
+t:insert_before(n6, n1)
 local data = sequence()
-for v in tree:each_child(root) do
+for v in t:each_child(root) do
   data:push(v)
 end
-json.write(io.stdout, data):write("\n")
-json.write(io.stdout, { n6, n1, n5, n2, n4 }):write("\n")
 assert(equal(data, { n6, n1, n5, n2, n4 }))
 
-tree:delete_node(n3)
+t:delete_node(n3)
 
 local m = 0
 local n = 0
-for u in tree:each_node() do
+for u in t:each_node() do
   m = m + u
   n = n + 1
 end
