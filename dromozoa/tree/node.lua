@@ -46,14 +46,14 @@ function class:parent()
   end
 end
 
-function class:next_sibiling()
+function class:next_sibling()
   local uid, model, props, tree = unpack_item(self)
-  return tree:get_node(model:next_sibiling_node(uid))
+  return tree:get_node(model:next_sibling_node(uid))
 end
 
 function class:prev_sibling()
   local uid, model, props, tree = unpack_item(self)
-  return tree:get_node(model:prev_sibiling_node(uid))
+  return tree:get_node(model:prev_sibling_node(uid))
 end
 
 function class:append_child(v)
@@ -73,7 +73,11 @@ end
 
 function class:each_child()
   local uid, model, props, tree = unpack_item(self)
-  return model:each_child(uid)
+  return coroutine.wrap(function ()
+    for vid in model:each_child(uid) do
+      coroutine.yield(tree:get_node(vid))
+    end
+  end)
 end
 
 function class:count_children()
@@ -81,9 +85,28 @@ function class:count_children()
   return model:count_children(uid)
 end
 
-local metatable = {
-  __index = class;
-}
+local metatable = {}
+
+function metatable:__index(key)
+  local uid, model, props, tree = unpack_item(self)
+  if key == "id" then
+    return uid
+  else
+    local value = props:get_property(uid, key)
+    if value == nil then
+      return class[key]
+    end
+    return value
+  end
+end
+
+function metatable:__newindex(key, value)
+  local uid, model, props, tree = unpack_item(self)
+  if key == "id" then
+    error "cannot modify constant"
+  end
+  props:set_property(uid, key, value)
+end
 
 return setmetatable(class, {
   __call = function (_, tree, id)

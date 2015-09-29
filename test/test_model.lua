@@ -64,7 +64,6 @@ assert(t:prev_sibling_node(n2) == n1)
 t:insert_before(n5, n2)
 local data = sequence()
 for v in t:each_child(root) do
-  print(v)
   data:push(v)
 end
 assert(equal(data, { n1, n5, n2, n4 }))
