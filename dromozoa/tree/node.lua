@@ -15,6 +15,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with dromozoa-tree.  If not, see <http://www.gnu.org/licenses/>.
 
+local bfs = require "dromozoa.tree.bfs"
 local dfs = require "dromozoa.tree.dfs"
 
 local private_tree = function () end
@@ -85,6 +86,11 @@ end
 function class:count_children()
   local uid, model, props, tree = unpack_item(self)
   return model:count_children(uid)
+end
+
+function class:bfs(visitor)
+  local uid, model, props, tree = unpack_item(self)
+  bfs(tree, visitor, self)
 end
 
 function class:dfs(visitor)
