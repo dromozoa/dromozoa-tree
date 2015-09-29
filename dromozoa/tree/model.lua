@@ -30,7 +30,7 @@ function class.new()
   }
 end
 
-function class:create_node()
+function class:create()
   local uid = self.n + 1
   self.n = uid
   self.p[uid] = 0
@@ -40,7 +40,7 @@ function class:create_node()
   return uid
 end
 
-function class:delete_node(uid)
+function class:delete(uid)
   self.p[uid] = nil
   self.c[uid] = nil
   self.ns[uid] = nil
@@ -51,20 +51,33 @@ function class:empty()
   return empty(self.p)
 end
 
-function class:each_node()
+function class:each()
   return pairs(self.p)
 end
 
-function class:parent_node(uid)
+function class:parent(uid)
   return self.p[uid]
 end
 
-function class:next_sibling_node(uid)
+function class:next_sibling(uid)
   return self.ns[uid]
 end
 
-function class:prev_sibling_node(uid)
+function class:prev_sibling(uid)
   return self.ps[uid]
+end
+
+function class:insert(uid, vid)
+  local p = self.p
+  local ns = self.ns
+  local ps = self.ps
+  p[vid] = p[uid]
+  local next_id = uid
+  local prev_id = ps[next_id]
+  ns[prev_id] = vid
+  ns[vid] = next_id
+  ps[vid] = prev_id
+  ps[next_id] = vid
 end
 
 function class:append(uid, vid)
@@ -83,19 +96,6 @@ function class:append(uid, vid)
     ps[vid] = prev_id
     ps[next_id] = vid
   end
-end
-
-function class:insert(uid, vid)
-  local p = self.p
-  local ns = self.ns
-  local ps = self.ps
-  p[vid] = p[uid]
-  local next_id = uid
-  local prev_id = ps[next_id]
-  ns[prev_id] = vid
-  ns[vid] = next_id
-  ps[vid] = prev_id
-  ps[next_id] = vid
 end
 
 function class:remove(vid)
@@ -118,7 +118,7 @@ function class:remove(vid)
   end
 end
 
-function class:each(uid)
+function class:each_child(uid)
   local start_id = self.c[uid]
   if start_id == 0 then
     return function () end
