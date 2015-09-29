@@ -16,71 +16,75 @@
 -- along with dromozoa-tree.  If not, see <http://www.gnu.org/licenses/>.
 
 local equal = require "dromozoa.commons.equal"
+local json = require "dromozoa.commons.json"
 local sequence = require "dromozoa.commons.sequence"
 local model = require "dromozoa.tree.model"
 
 local tree = model()
 
-local root = tree:create()
+local root = tree:create_node()
 
-local n1 = tree:create()
-local n2 = tree:create()
-local n3 = tree:create()
-local n4 = tree:create()
-local n5 = tree:create()
-local n6 = tree:create()
+local n1 = tree:create_node()
+local n2 = tree:create_node()
+local n3 = tree:create_node()
+local n4 = tree:create_node()
+local n5 = tree:create_node()
+local n6 = tree:create_node()
 
-tree:append(root, n1)
-tree:append(root, n2)
-tree:append(root, n3)
-tree:append(root, n4)
-assert(tree:count(root) == 4)
+tree:append_child(root, n1)
+tree:append_child(root, n2)
+tree:append_child(root, n3)
+tree:append_child(root, n4)
+assert(tree:count_children(root) == 4)
 
-tree:append(n1, tree:create())
-tree:append(n1, tree:create())
-assert(tree:count(n1) == 2)
-tree:append(n2, tree:create())
-tree:append(n2, tree:create())
-assert(tree:count(n2) == 2)
-tree:append(n3, tree:create())
-tree:append(n3, tree:create())
-assert(tree:count(n3) == 2)
-tree:append(n4, tree:create())
-tree:append(n4, tree:create())
-assert(tree:count(n4) == 2)
+tree:append_child(n1, tree:create_node())
+tree:append_child(n1, tree:create_node())
+assert(tree:count_children(n1) == 2)
+tree:append_child(n2, tree:create_node())
+tree:append_child(n2, tree:create_node())
+assert(tree:count_children(n2) == 2)
+tree:append_child(n3, tree:create_node())
+tree:append_child(n3, tree:create_node())
+assert(tree:count_children(n3) == 2)
+tree:append_child(n4, tree:create_node())
+tree:append_child(n4, tree:create_node())
+assert(tree:count_children(n4) == 2)
 
-tree:remove(n3)
-assert(tree:count(root) == 3)
+tree:remove_node(n3)
+assert(tree:count_children(root) == 3)
 
 local data = sequence()
-for v in tree:each(root) do
-  sequence:push(v)
+for v in tree:each_child(root) do
+  data:push(v)
 end
 assert(equal(data, { n1, n2, n4 }))
 
-assert(tree:parent(n2) == root)
-assert(tree:next_sibling(n2) == n4)
-assert(tree:prev_sibling(n2) == n1)
+assert(tree:parent_node(n2) == root)
+assert(tree:next_sibling_node(n2) == n4)
+assert(tree:prev_sibling_node(n2) == n1)
 
-tree:insert(n2, n5)
+tree:insert_before(n5, n2)
 local data = sequence()
-for v in tree:each(root) do
-  sequence:push(v)
+for v in tree:each_child(root) do
+  print(v)
+  data:push(v)
 end
 assert(equal(data, { n1, n5, n2, n4 }))
 
-tree:insert(n1, n6)
+tree:insert_before(n6, n1)
 local data = sequence()
-for v in tree:each(root) do
-  sequence:push(v)
+for v in tree:each_child(root) do
+  data:push(v)
 end
+json.write(io.stdout, data):write("\n")
+json.write(io.stdout, { n6, n1, n5, n2, n4 }):write("\n")
 assert(equal(data, { n6, n1, n5, n2, n4 }))
 
-tree:delete(n3)
+tree:delete_node(n3)
 
 local m = 0
 local n = 0
-for u in tree:each() do
+for u in tree:each_node() do
   m = m + u
   n = n + 1
 end
