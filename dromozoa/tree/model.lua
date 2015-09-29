@@ -15,6 +15,9 @@
 -- You should have received a copy of the GNU General Public License
 -- along with dromozoa-tree.  If not, see <http://www.gnu.org/licenses/>.
 
+local empty = require "dromozoa.commons.empty"
+local pairs = require "dromozoa.commons.pairs"
+
 local class = {}
 
 function class.new()
@@ -42,6 +45,14 @@ function class:remove_node(uid)
   self.c[uid] = nil
   self.ns[uid] = nil
   self.ps[uid] = nil
+end
+
+function class:empty()
+  return empty(self.p)
+end
+
+function class:each_node()
+  return pairs(self.p)
 end
 
 function class:parent_node(uid)

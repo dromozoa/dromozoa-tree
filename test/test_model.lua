@@ -75,3 +75,13 @@ for v in tree:each_child(root) do
   sequence:push(v)
 end
 assert(equal(data, { n6, n1, n5, n2, n4 }))
+
+local m = 0
+local n = 0
+for u in tree:each_node() do
+  m = m + u
+  n = n + 1
+end
+assert(m == 120)
+assert(n == 15)
+
