@@ -25,4 +25,14 @@ local function dfs(tree, visitor, u)
   visit(visitor, "finish_node", tree, u)
 end
 
-return dfs
+return function (tree, visitor, s)
+  if s == nil then
+    for u in tree:each_node() do
+      if u:parent() == nil then
+        dfs(tree, visitor, u)
+      end
+    end
+  else
+    dfs(tree, visitor, s)
+  end
+end

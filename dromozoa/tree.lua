@@ -16,6 +16,7 @@
 -- along with dromozoa-tree.  If not, see <http://www.gnu.org/licenses/>.
 
 local property_map = require "dromozoa.commons.property_map"
+local dfs = require "dromozoa.tree.dfs"
 local graphviz = require "dromozoa.tree.graphviz"
 local model = require "dromozoa.tree.model"
 local node = require "dromozoa.tree.node"
@@ -67,6 +68,10 @@ end
 
 function class:clear_node_properties(key)
   self.props:clear(key)
+end
+
+function class:dfs(visitor)
+  dfs(self, visitor, nil)
 end
 
 function class:write_graphviz(out, visitor)

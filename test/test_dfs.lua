@@ -16,6 +16,7 @@
 -- along with dromozoa-tree.  If not, see <http://www.gnu.org/licenses/>.
 
 local equal = require "dromozoa.commons.equal"
+local json = require "dromozoa.commons.json"
 local sequence = require "dromozoa.commons.sequence"
 local tree = require "dromozoa.tree"
 
@@ -28,6 +29,8 @@ local n3 = t:create_node()
 local n4 = t:create_node()
 local n5 = t:create_node()
 local n6 = t:create_node()
+local n7 = t:create_node()
+local n8 = t:create_node()
 
 root:append_child(n1)
 root:append_child(n2)
@@ -35,6 +38,7 @@ n1:append_child(n3)
 n1:append_child(n4)
 n2:append_child(n5)
 n2:append_child(n6)
+n7:append_child(n8)
 
 local data = sequence()
 root:dfs({
@@ -57,3 +61,15 @@ assert(equal(data, {
     "finish", n2.id,
   "finish", root.id,
 }))
+
+local data = sequence()
+local count = 0
+t:dfs({
+  discover_node = function (ctx, tree, node)
+    if node:parent() == nil then
+      assert(node.id == root.id or node.id == n7.id)
+      count = count + 1
+    end
+  end;
+})
+assert(count == 2)
