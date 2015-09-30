@@ -155,6 +155,10 @@ function class:count_children(uid)
   end
 end
 
+function class:isolated(uid)
+  return self.p[uid] == 0 and self.c[uid] == 0
+end
+
 local metatable = {
   __index = class;
 }
