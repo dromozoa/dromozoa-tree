@@ -21,13 +21,13 @@ local visit = require "dromozoa.commons.visit"
 
 return function (tree, visitor, s)
   local q = queue():push(s)
-  visit(visitor, "discover_node", tree, s)
+  visit(visitor, "discover_node", s)
   while not empty(q) do
     local u = q:pop()
     for v in u:each_child() do
       q:push(v)
-      visit(visitor, "discover_node", tree, v)
+      visit(visitor, "discover_node", v)
     end
-    visit(visitor, "finish_node", tree, u)
+    visit(visitor, "finish_node", u)
   end
 end
