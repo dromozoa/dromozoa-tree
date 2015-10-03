@@ -35,6 +35,11 @@ function class.new(tree, id)
   }
 end
 
+function class:tree()
+  local uid, model, props, tree = unpack_item(self)
+  return tree
+end
+
 function class:delete()
   local uid, model, props, tree = unpack_item(self)
   model:delete_node(uid)
