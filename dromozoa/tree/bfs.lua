@@ -19,11 +19,11 @@ local empty = require "dromozoa.commons.empty"
 local queue = require "dromozoa.commons.queue"
 local visit = require "dromozoa.commons.visit"
 
-return function (tree, visitor, s)
-  local q = queue():push(s)
-  visit(visitor, "discover_node", s)
+return function (tree, visitor, u)
+  local q = queue():push(u)
+  visit(visitor, "discover_node", u)
   while not empty(q) do
-    local u = q:pop()
+    u = q:pop()
     for v in u:each_child() do
       q:push(v)
       visit(visitor, "discover_node", v)
