@@ -37,8 +37,8 @@ assert(n2:parent().id == root.id)
 assert(n2:next_sibling().id == n3.id)
 assert(n2:prev_sibling().id == n1.id)
 
-n4:insert_before(n3)
-n5:insert_before(n1)
+n3:insert_sibling(n4)
+n1:insert_sibling(n5)
 local data = sequence()
 for u in root:each_child() do
   data:push(u.id)

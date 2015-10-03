@@ -69,9 +69,9 @@ function class:append_child(v)
   model:append_child(uid, v.id)
 end
 
-function class:insert_before(v)
+function class:insert_sibling(v)
   local uid, model, props, tree = unpack_item(self)
-  model:insert_before(uid, v.id)
+  model:insert_sibling(uid, v.id)
 end
 
 function class:remove()
