@@ -85,7 +85,7 @@ function class:append_child(uid, vid)
   end
 end
 
-function class:insert_before(vid, next_id)
+function class:insert_sibling(next_id, vid)
   local p = self.p
   local c = self.c
   local ns = self.ns

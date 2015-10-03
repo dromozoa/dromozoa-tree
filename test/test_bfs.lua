@@ -38,10 +38,10 @@ n2:append_child(n6)
 
 local data = sequence()
 root:bfs({
-  discover_node = function (ctx, tree, node)
+  discover_node = function (self, node)
     data:push("discover", node.id)
   end;
-  finish_node = function (ctx, tree, node)
+  finish_node = function (self, node)
     data:push("finish", node.id)
   end;
 })

@@ -61,14 +61,14 @@ assert(t:parent_node(n2) == root)
 assert(t:next_sibling_node(n2) == n4)
 assert(t:prev_sibling_node(n2) == n1)
 
-t:insert_before(n5, n2)
+t:insert_sibling(n2, n5)
 local data = sequence()
 for v in t:each_child(root) do
   data:push(v)
 end
 assert(equal(data, { n1, n5, n2, n4 }))
 
-t:insert_before(n6, n1)
+t:insert_sibling(n1, n6)
 local data = sequence()
 for v in t:each_child(root) do
   data:push(v)

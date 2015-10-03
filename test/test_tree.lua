@@ -37,8 +37,8 @@ assert(n2:parent().id == root.id)
 assert(n2:next_sibling().id == n3.id)
 assert(n2:prev_sibling().id == n1.id)
 
-n4:insert_before(n3)
-n5:insert_before(n1)
+n3:insert_sibling(n4)
+n1:insert_sibling(n5)
 local data = sequence()
 for u in root:each_child() do
   data:push(u.id)
@@ -88,3 +88,9 @@ for u in t:each_node("root") do
   n = n + 1
 end
 assert(n == 1)
+
+local t = tree()
+local n1 = t:create_node()
+local n2 = n1:tree():create_node():append_child(n1)
+n1:append_child():append_child():append_child()
+n1:insert_sibling():insert_sibling():insert_sibling()
