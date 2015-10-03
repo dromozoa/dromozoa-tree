@@ -42,10 +42,10 @@ n7:append_child(n8)
 
 local data = sequence()
 root:dfs({
-  discover_node = function (ctx, tree, node)
+  discover_node = function (self, tree, node)
     data:push("discover", node.id)
   end;
-  finish_node = function (ctx, tree, node)
+  finish_node = function (self, tree, node)
     data:push("finish", node.id)
   end;
 })
@@ -65,7 +65,7 @@ assert(equal(data, {
 local data = sequence()
 local count = 0
 t:dfs({
-  discover_node = function (ctx, tree, node)
+  discover_node = function (self, tree, node)
     if node:parent() == nil then
       assert(node.id == root.id or node.id == n7.id)
       count = count + 1
