@@ -88,3 +88,7 @@ for u in t:each_node("root") do
   n = n + 1
 end
 assert(n == 1)
+
+local t = tree()
+local n1 = t:create_node()
+local n2 = n1:tree():create_node():append_child(n1)
