@@ -17,22 +17,24 @@
 
 local visit = require "dromozoa.commons.visit"
 
-local function dfs(tree, visitor, u)
-  visit(visitor, "discover_node", tree, u)
+local function dfs(visitor, u)
+  visit(visitor, "discover_node", u)
   for v in u:each_child() do
-    dfs(tree, visitor, v)
+    dfs(visitor, v)
   end
-  visit(visitor, "finish_node", tree, u)
+  visit(visitor, "finish_node", u)
 end
 
 return function (tree, visitor, s)
   if s == nil then
     for u in tree:each_node() do
       if u:parent() == nil then
-        dfs(tree, visitor, u)
+        visit(visitor, "start_node", u)
+        dfs(visitor, u)
       end
     end
   else
-    dfs(tree, visitor, s)
+    visit(visitor, "start_node", s)
+    dfs(visitor, s)
   end
 end
