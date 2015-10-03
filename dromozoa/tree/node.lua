@@ -66,12 +66,20 @@ end
 
 function class:append_child(v)
   local uid, model, props, tree = unpack_item(self)
+  if v == nil then
+    v = tree:create_node()
+  end
   model:append_child(uid, v.id)
+  return v
 end
 
 function class:insert_sibling(v)
   local uid, model, props, tree = unpack_item(self)
+  if v == nil then
+    v = tree:create_node()
+  end
   model:insert_sibling(uid, v.id)
+  return v
 end
 
 function class:remove()
