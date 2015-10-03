@@ -63,13 +63,19 @@ assert(equal(data, {
 }))
 
 local data = sequence()
-local count = 0
+local m = 0
+local n = 0
 t:dfs({
+  start_node = function (self, node)
+    assert(node.id == root.id or node.id == n7.id)
+    m = m + 1
+  end;
   discover_node = function (self, node)
     if node:parent() == nil then
       assert(node.id == root.id or node.id == n7.id)
-      count = count + 1
+      n = n + 1
     end
   end;
 })
-assert(count == 2)
+assert(m == 2)
+assert(n == 2)

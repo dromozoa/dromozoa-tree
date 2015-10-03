@@ -29,10 +29,12 @@ return function (tree, visitor, s)
   if s == nil then
     for u in tree:each_node() do
       if u:parent() == nil then
+        visit(visitor, "start_node", u)
         dfs(visitor, u)
       end
     end
   else
+    visit(visitor, "start_node", s)
     dfs(visitor, s)
   end
 end
