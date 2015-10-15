@@ -55,22 +55,22 @@ local function write(out, tree, visitor)
       end
     end
   else
-    write_attributes(out, visit(visitor, "graph_attributes", tree), "graph", ";\n")
-    write_attributes(out, visit(visitor, "default_node_attributes", tree), "node", ";\n")
+    write_attributes(out, visit(visitor, "graph_attributes"), "graph", ";\n")
+    write_attributes(out, visit(visitor, "default_node_attributes"), "node", ";\n")
     for u in tree:each_node() do
-      local attributes = visit(visitor, "node_attributes", tree, u)
+      local attributes = visit(visitor, "node_attributes", u)
       if attributes ~= nil or u:isolated() then
         out:write(u.id)
         write_attributes(out, attributes)
         out:write(";\n")
       end
     end
-    write_attributes(out, visit(visitor, "default_edge_attributes", tree), "edge", ";\n")
+    write_attributes(out, visit(visitor, "default_edge_attributes"), "edge", ";\n")
     for v in tree:each_node() do
       local u = v:parent()
       if u ~= nil then
         out:write(u.id, " -> ", v.id)
-        write_attributes(out, visit(visitor, "edge_attributes", tree, u, v), "edge", ";\n")
+        write_attributes(out, visit(visitor, "edge_attributes", u, v), "edge", ";\n")
         out:write(";\n")
       end
     end

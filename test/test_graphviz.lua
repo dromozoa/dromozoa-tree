@@ -41,12 +41,12 @@ assert(not data:find("\n" .. n1.id .. ";"))
 assert(data:find("\n" .. n6.id .. ";"))
 
 local data = t:write_graphviz(sequence_writer(), {
-  default_node_attributes = function (_, t)
+  default_node_attributes = function ()
     return {
       style = "filled";
     }
   end;
-  node_attributes = function (_, t, u)
+  node_attributes = function (_, u)
     if u.id == root.id then
       return {
         fontcolor = "white";
