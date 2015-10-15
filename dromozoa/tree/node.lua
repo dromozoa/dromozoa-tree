@@ -87,6 +87,11 @@ function class:remove()
   model:remove_node(uid)
 end
 
+function class:each_property()
+  local uid, model, props, tree = unpack_item(self)
+  return props:each_property(uid)
+end
+
 function class:each_child()
   local uid, model, props, tree = unpack_item(self)
   return coroutine.wrap(function ()

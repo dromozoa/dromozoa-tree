@@ -94,3 +94,19 @@ local n1 = t:create_node()
 local n2 = n1:tree():create_node():append_child(n1)
 n1:append_child():append_child():append_child()
 n1:insert_sibling():insert_sibling():insert_sibling()
+
+local t = tree()
+local n1 = t:create_node()
+n1.foo = 17
+n1.bar = 23
+n1.baz = 37
+n1.qux = 42
+
+local m = 0
+local n = 0
+for k, v in n1:each_property() do
+  m = m + v
+  n = n + 1
+end
+assert(m == 17 + 23 + 37 + 42)
+assert(n == 4)
