@@ -107,9 +107,9 @@ function class:count_children()
   return model:count_children(uid)
 end
 
-function class:isolated()
+function class:is_isolated()
   local uid, model, props, tree = unpack_item(self)
-  return model:isolated(uid)
+  return model:is_isolated(uid)
 end
 
 function class:children()
@@ -119,6 +119,16 @@ function class:children()
     children:push(tree:get_node(vid))
   end
   return children
+end
+
+function class:is_first_child()
+  local uid, model, props, tree = unpack_item(self)
+  return model:is_first_child(uid)
+end
+
+function class:is_last_child()
+  local uid, model, props, tree = unpack_item(self)
+  return model:is_last_child(uid)
 end
 
 function class:bfs(visitor)

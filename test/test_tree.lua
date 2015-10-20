@@ -122,4 +122,11 @@ assert(children[1].id == n1.id)
 assert(children[2].id == n2.id)
 assert(children[3].id == n3.id)
 
-
+assert(n1:is_first_child())
+assert(not n2:is_first_child())
+assert(not n3:is_first_child())
+assert(not root:is_first_child())
+assert(not root:is_last_child())
+assert(not n1:is_last_child())
+assert(not n2:is_last_child())
+assert(n3:is_last_child())
