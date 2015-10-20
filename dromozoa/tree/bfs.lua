@@ -25,8 +25,10 @@ return function (tree, visitor, u)
   while not empty(q) do
     u = q:pop()
     for v in u:each_child() do
-      q:push(v)
-      visit(visitor, "discover_node", v)
+      if visit(visitor, "examine_edge", u, v) ~= false then
+        q:push(v)
+        visit(visitor, "discover_node", v)
+      end
     end
     visit(visitor, "finish_node", u)
   end

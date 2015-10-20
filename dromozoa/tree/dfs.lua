@@ -20,7 +20,9 @@ local visit = require "dromozoa.commons.visit"
 local function dfs(visitor, u)
   visit(visitor, "discover_node", u)
   for v in u:each_child() do
-    dfs(visitor, v)
+    if visit(visitor, "examine_edge", u, v) ~= false then
+      dfs(visitor, v)
+    end
   end
   visit(visitor, "finish_node", u)
 end

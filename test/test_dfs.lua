@@ -16,7 +16,6 @@
 -- along with dromozoa-tree.  If not, see <http://www.gnu.org/licenses/>.
 
 local equal = require "dromozoa.commons.equal"
-local json = require "dromozoa.commons.json"
 local sequence = require "dromozoa.commons.sequence"
 local tree = require "dromozoa.tree"
 
@@ -79,3 +78,34 @@ t:dfs({
 })
 assert(m == 2)
 assert(n == 2)
+
+
+local data = sequence()
+root:dfs({
+  discover_node = function (self, node)
+    data:push("discover", node.id, 0)
+  end;
+  examine_edge = function (self, u, v)
+    data:push("examine", u.id, v.id)
+    if u.id == root.id and v.id == n2.id then
+      return false
+    end
+  end;
+  finish_node = function (self, node)
+    data:push("finish", node.id, 0)
+  end;
+})
+assert(equal(data, {
+  "discover", root.id, 0,
+    "examine", root.id, n1.id,
+    "discover", n1.id, 0,
+      "examine", n1.id, n3.id,
+      "discover", n3.id, 0,
+      "finish", n3.id, 0,
+      "examine", n1.id, n4.id,
+      "discover", n4.id, 0,
+      "finish", n4.id, 0,
+    "finish", n1.id, 0,
+    "examine", root.id, n2.id,
+  "finish", root.id, 0,
+}))
