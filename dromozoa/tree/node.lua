@@ -121,6 +121,16 @@ function class:children()
   return children
 end
 
+function class:is_first_child()
+  local uid, model, props, tree = unpack_item(self)
+  return model:is_first_child(uid)
+end
+
+function class:is_last_child()
+  local uid, model, props, tree = unpack_item(self)
+  return model:is_last_child(uid)
+end
+
 function class:bfs(visitor)
   local uid, model, props, tree = unpack_item(self)
   bfs(tree, visitor, self)
