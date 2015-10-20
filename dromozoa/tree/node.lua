@@ -15,6 +15,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with dromozoa-tree.  If not, see <http://www.gnu.org/licenses/>.
 
+local sequence = require "dromozoa.commons.sequence"
 local bfs = require "dromozoa.tree.bfs"
 local dfs = require "dromozoa.tree.dfs"
 
@@ -109,6 +110,15 @@ end
 function class:isolated()
   local uid, model, props, tree = unpack_item(self)
   return model:isolated(uid)
+end
+
+function class:children()
+  local uid, model, props, tree = unpack_item(self)
+  local children = sequence()
+  for vid in model:each_child(uid) do
+    children:push(tree:get_node(vid))
+  end
+  return children
 end
 
 function class:bfs(visitor)

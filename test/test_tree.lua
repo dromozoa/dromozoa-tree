@@ -110,3 +110,16 @@ for k, v in n1:each_property() do
 end
 assert(m == 17 + 23 + 37 + 42)
 assert(n == 4)
+
+local root = tree():create_node()
+local n1 = root:append_child()
+local n2 = root:append_child()
+local n3 = root:append_child()
+assert(root:count_children() == 3)
+local children = root:children()
+assert(#children == 3)
+assert(children[1].id == n1.id)
+assert(children[2].id == n2.id)
+assert(children[3].id == n3.id)
+
+
