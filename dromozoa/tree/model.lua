@@ -155,6 +155,14 @@ function class:count_children(uid)
   end
 end
 
+function class:is_root(uid)
+  return self.p[uid] == 0
+end
+
+function class:is_leaf(uid)
+  return self.c[uid] == 0
+end
+
 function class:is_isolated(uid)
   return self.p[uid] == 0 and self.c[uid] == 0
 end
