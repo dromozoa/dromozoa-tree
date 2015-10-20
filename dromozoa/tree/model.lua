@@ -155,7 +155,7 @@ function class:count_children(uid)
   end
 end
 
-function class:isolated(uid)
+function class:is_isolated(uid)
   return self.p[uid] == 0 and self.c[uid] == 0
 end
 

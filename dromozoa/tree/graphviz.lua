@@ -44,7 +44,7 @@ local function write(out, tree, visitor)
   out:write("digraph g {\n")
   if visitor == nil then
     for u in tree:each_node() do
-      if u:isolated() then
+      if u:is_isolated() then
         out:write(u.id, ";\n")
       end
     end
@@ -59,7 +59,7 @@ local function write(out, tree, visitor)
     write_attributes(out, visit(visitor, "default_node_attributes"), "node", ";\n")
     for u in tree:each_node() do
       local attributes = visit(visitor, "node_attributes", u)
-      if attributes ~= nil or u:isolated() then
+      if attributes ~= nil or u:is_isolated() then
         out:write(u.id)
         write_attributes(out, attributes)
         out:write(";\n")

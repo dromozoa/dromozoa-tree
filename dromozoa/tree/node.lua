@@ -107,9 +107,9 @@ function class:count_children()
   return model:count_children(uid)
 end
 
-function class:isolated()
+function class:is_isolated()
   local uid, model, props, tree = unpack_item(self)
-  return model:isolated(uid)
+  return model:is_isolated(uid)
 end
 
 function class:children()
