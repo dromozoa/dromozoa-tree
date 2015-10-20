@@ -107,11 +107,6 @@ function class:count_children()
   return model:count_children(uid)
 end
 
-function class:is_isolated()
-  local uid, model, props, tree = unpack_item(self)
-  return model:is_isolated(uid)
-end
-
 function class:children()
   local uid, model, props, tree = unpack_item(self)
   local children = sequence()
@@ -119,6 +114,21 @@ function class:children()
     children:push(tree:get_node(vid))
   end
   return children
+end
+
+function class:is_root()
+  local uid, model, props, tree = unpack_item(self)
+  return model:is_root(uid)
+end
+
+function class:is_leaf()
+  local uid, model, props, tree = unpack_item(self)
+  return model:is_leaf(uid)
+end
+
+function class:is_isolated()
+  local uid, model, props, tree = unpack_item(self)
+  return model:is_isolated(uid)
 end
 
 function class:is_first_child()
