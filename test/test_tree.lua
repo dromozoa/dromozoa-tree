@@ -122,10 +122,21 @@ assert(children[1].id == n1.id)
 assert(children[2].id == n2.id)
 assert(children[3].id == n3.id)
 
+assert(root:is_root())
+assert(not n1:is_root())
+assert(not n2:is_root())
+assert(not n3:is_root())
+
+assert(not root:is_leaf())
+assert(n1:is_leaf())
+assert(n2:is_leaf())
+assert(n3:is_leaf())
+
+assert(not root:is_first_child())
 assert(n1:is_first_child())
 assert(not n2:is_first_child())
 assert(not n3:is_first_child())
-assert(not root:is_first_child())
+
 assert(not root:is_last_child())
 assert(not n1:is_last_child())
 assert(not n2:is_last_child())
