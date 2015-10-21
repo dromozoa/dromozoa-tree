@@ -21,13 +21,18 @@ local function dfs(visitor, u)
   visit(visitor, "discover_node", u)
   for v in u:each_child() do
     if visit(visitor, "examine_edge", u, v) ~= false then
+      visit(visitor, "tree_edge", u, v)
       dfs(visitor, v)
+      visit(visitor, "finish_edge", u, v)
     end
   end
   visit(visitor, "finish_node", u)
 end
 
 return function (tree, visitor, s)
+  for u in tree:each_node() do
+    visit(visitor, "initialize_node", u)
+  end
   if s == nil then
     for u in tree:each_node() do
       if u:parent() == nil then
