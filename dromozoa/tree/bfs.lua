@@ -20,12 +20,16 @@ local queue = require "dromozoa.commons.queue"
 local visit = require "dromozoa.commons.visit"
 
 return function (tree, visitor, u)
+  for u in tree:each_node() do
+    visit(visitor, "initialize_node", u)
+  end
   local q = queue():push(u)
   visit(visitor, "discover_node", u)
   while not empty(q) do
     u = q:pop()
     for v in u:each_child() do
       if visit(visitor, "examine_edge", u, v) ~= false then
+        visit(visitor, "tree_edge", u, v)
         q:push(v)
         visit(visitor, "discover_node", v)
       end
