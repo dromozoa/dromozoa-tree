@@ -86,6 +86,7 @@ end
 function class:remove()
   local uid, model, props, tree = unpack_item(self)
   model:remove_node(uid)
+  return self
 end
 
 function class:each_property()
@@ -154,10 +155,9 @@ end
 function class:collapse()
   local children = self:children()
   for u in children:each() do
-    u:remove()
-    self:insert_sibling(u)
+    self:insert_sibling(u:remove())
   end
-  self:remove()
+  return self:remove()
 end
 
 local metatable = {}
