@@ -33,10 +33,17 @@ n1:append_child(n3)
 n1:append_child(n4)
 n3:append_child(n5)
 n3:append_child(n6)
+
+n3.color = true
 n3:collapse()
+assert(n3.color == true)
+n3:delete()
+assert(n3.color == nil)
 
 local data = sequence()
 for u in n1:each_child() do
   data:push(u.id)
 end
 assert(equal(data, { n2.id, n5.id, n6.id, n4.id }))
+
+t:write_graphviz(assert(io.open("test.dot", "w"))):close()
