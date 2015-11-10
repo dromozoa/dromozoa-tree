@@ -151,6 +151,15 @@ function class:dfs(visitor)
   dfs(tree, visitor, self)
 end
 
+function class:collapse()
+  local children = self:children()
+  for u in children:each() do
+    u:remove()
+    self:insert_sibling(u)
+  end
+  self:remove()
+end
+
 local metatable = {}
 
 function metatable:__index(key)
