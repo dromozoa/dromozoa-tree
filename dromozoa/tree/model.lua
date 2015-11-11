@@ -123,19 +123,17 @@ function class:remove_node(vid)
 end
 
 function class:each_child(uid)
-  local start_id = self.c[uid]
-  if start_id == 0 then
+  local vid = self.c[uid]
+  if vid == 0 then
     return function () end
   else
     local ns = self.ns
-    local ps = self.ps
-    local prev_id = ps[start_id]
+    local last_id = self.ps[vid]
     return coroutine.wrap(function ()
-      local vid = start_id
       while true do
         local next_id = ns[vid]
         coroutine.yield(vid)
-        if vid == prev_id then
+        if vid == last_id then
           break
         end
         vid = next_id
@@ -145,13 +143,13 @@ function class:each_child(uid)
 end
 
 function class:count_children(uid)
-  local start_id = self.c[uid]
-  if start_id == 0 then
+  local vid = self.c[uid]
+  if vid == 0 then
     return 0
   else
     local ns = self.ns
     local count = 0
-    local vid = start_id
+    local start_id = vid
     repeat
       count = count + 1
       vid = ns[vid]
