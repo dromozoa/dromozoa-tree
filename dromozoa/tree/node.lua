@@ -156,7 +156,7 @@ end
 function class:duplicate()
   local uid, model, props, tree = unpack_item(self)
   local map = {}
-  self:dfs({
+  dfs(model, {
     discover_node = function (_, a)
       local b = tree:create_node()
       map[a.id] = b.id
@@ -167,7 +167,7 @@ function class:duplicate()
     finish_edge = function (_, a, b)
       model:append_child(map[a.id], map[b.id])
     end;
-  })
+  }, self)
   return tree:get_node(map[uid]), map
 end
 
