@@ -172,8 +172,7 @@ function class:duplicate()
 end
 
 function class:collapse()
-  local children = self:children()
-  for u in children:each() do
+  for u in self:each_child() do
     self:insert_sibling(u:remove())
   end
   return self:remove()
