@@ -128,13 +128,18 @@ function class:each_child(uid)
     return function () end
   else
     local ns = self.ns
+    local ps = self.ps
+    local prev_id = ps[start_id]
     return coroutine.wrap(function ()
       local vid = start_id
-      repeat
+      while true do
         local next_id = ns[vid]
         coroutine.yield(vid)
+        if vid == prev_id then
+          break
+        end
         vid = next_id
-      until vid == self.c[uid]
+      end
     end)
   end
 end

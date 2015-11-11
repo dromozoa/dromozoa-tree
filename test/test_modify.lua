@@ -16,6 +16,7 @@
 -- along with dromozoa-tree.  If not, see <http://www.gnu.org/licenses/>.
 
 local equal = require "dromozoa.commons.equal"
+local json = require "dromozoa.commons.json"
 local sequence = require "dromozoa.commons.sequence"
 local tree = require "dromozoa.tree"
 
@@ -47,3 +48,13 @@ for u in n1:each_child() do
   data:push(u.id)
 end
 assert(equal(data, { 6, 7, 8, 9 }))
+
+for u in n1:each_child() do
+  u:remove()
+end
+
+local data = sequence()
+for u in n1:each_child() do
+  data:push(u.id)
+end
+assert(equal(data, {}))
