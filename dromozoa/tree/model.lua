@@ -134,7 +134,7 @@ function class:each_child(uid)
         local next_id = ns[vid]
         coroutine.yield(vid)
         vid = next_id
-      until vid == start_id
+      until vid == self.c[uid]
     end)
   end
 end
