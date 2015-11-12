@@ -73,6 +73,7 @@ for u in t:each_node() do
 end
 assert(m == n1.id + n2.id + n4.id + n5.id + n6.id)
 assert(n == 5)
+assert(t:count_node() == 5)
 
 n1.level = 1
 n1.n1 = true
@@ -88,6 +89,8 @@ for u in t:each_node("n1") do
   n = n + 1
 end
 assert(n == 1)
+assert(t:count_node("n1") == 1)
+assert(t:count_node("level") == 5)
 
 local t = tree()
 local n2 = t:create_node()

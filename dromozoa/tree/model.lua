@@ -55,6 +55,14 @@ function class:each_node()
   return pairs(self.p)
 end
 
+function class:count_node()
+  local count = 0
+  for _ in pairs(self.p) do
+    count = count + 1
+  end
+  return count
+end
+
 function class:parent_node(uid)
   return self.p[uid]
 end
