@@ -20,7 +20,6 @@ local tree = require "dromozoa.tree"
 
 local t = tree()
 
-local root = t:create_node()
 local n1 = t:create_node()
 local n2 = t:create_node()
 local n3 = t:create_node()
@@ -28,17 +27,18 @@ local n4 = t:create_node()
 local n5 = t:create_node()
 local n6 = t:create_node()
 local n7 = t:create_node()
+local n8 = t:create_node()
 
-root:append_child(n1)
-root:append_child(n2)
+n1:append_child(n2)
 n1:append_child(n3)
-n1:append_child(n4)
+n2:append_child(n4)
 n2:append_child(n5)
-n3:insert_sibling(n7)
+n3:append_child(n6)
+n4:insert_sibling(n8)
 
 local data = t:write_graphviz(sequence_writer()):concat()
-assert(not data:find("\n" .. n1.id .. ";"))
-assert(data:find("\n" .. n6.id .. ";"))
+assert(not data:find("\n" .. n2.id .. ";"))
+assert(data:find("\n" .. n7.id .. ";"))
 
 local data = t:write_graphviz(sequence_writer(), {
   default_node_attributes = function ()
@@ -47,7 +47,7 @@ local data = t:write_graphviz(sequence_writer(), {
     }
   end;
   node_attributes = function (_, u)
-    if u.id == root.id then
+    if u.id == n1.id then
       return {
         fontcolor = "white";
         fillcolor = "black";
@@ -62,8 +62,8 @@ local data = t:write_graphviz(sequence_writer(), {
     end
   end;
 }):concat()
-assert(not data:find("\n" .. n1.id .. ";"))
-assert(data:find("\n" .. n6.id .. ";"))
+assert(not data:find("\n" .. n2.id .. ";"))
+assert(data:find("\n" .. n7.id .. ";"))
 local out = assert(io.open("test.dot", "w"))
 out:write(data)
 out:close()

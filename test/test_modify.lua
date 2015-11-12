@@ -16,6 +16,7 @@
 -- along with dromozoa-tree.  If not, see <http://www.gnu.org/licenses/>.
 
 local equal = require "dromozoa.commons.equal"
+local json = require "dromozoa.commons.json"
 local sequence = require "dromozoa.commons.sequence"
 local tree = require "dromozoa.tree"
 
@@ -23,24 +24,37 @@ local t = tree()
 local n1 = t:create_node()
 local n2 = t:create_node()
 local n3 = t:create_node()
-local n4 = t:create_node()
-local n5 = t:create_node()
-local n6 = t:create_node()
 
 n1:append_child(n2)
 n1:append_child(n3)
-n1:append_child(n4)
-n3:append_child(n5)
-n3:append_child(n6)
 
-n3.color = true
-n3:collapse()
-assert(n3.color == true)
-n3:delete()
-assert(n3.color == nil)
+for u in n1:each_child() do
+  u:insert_sibling()
+end
 
 local data = sequence()
 for u in n1:each_child() do
   data:push(u.id)
 end
-assert(equal(data, { n2.id, n5.id, n6.id, n4.id }))
+assert(equal(data, { 4, 2, 5, 3 }))
+
+for u in n1:each_child() do
+  u:insert_sibling()
+  u:remove():delete()
+end
+
+local data = sequence()
+for u in n1:each_child() do
+  data:push(u.id)
+end
+assert(equal(data, { 6, 7, 8, 9 }))
+
+for u in n1:each_child() do
+  u:remove()
+end
+
+local data = sequence()
+for u in n1:each_child() do
+  data:push(u.id)
+end
+assert(equal(data, {}))
