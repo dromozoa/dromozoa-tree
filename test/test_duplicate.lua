@@ -18,7 +18,6 @@
 local tree = require "dromozoa.tree"
 
 local t = tree()
-
 local n1 = t:create_node()
 local n2 = t:create_node()
 local n3 = t:create_node()

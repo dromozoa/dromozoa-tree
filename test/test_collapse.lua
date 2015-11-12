@@ -20,7 +20,6 @@ local sequence = require "dromozoa.commons.sequence"
 local tree = require "dromozoa.tree"
 
 local t = tree()
-
 local n1 = t:create_node()
 local n2 = t:create_node()
 local n3 = t:create_node()
@@ -45,5 +44,3 @@ for u in n1:each_child() do
   data:push(u.id)
 end
 assert(equal(data, { n2.id, n5.id, n6.id, n4.id }))
-
-t:write_graphviz(assert(io.open("test.dot", "w"))):close()
