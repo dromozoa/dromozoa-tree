@@ -1,8 +1,8 @@
 package = "dromozoa-tree"
-version = "1.9-1"
+version = "1.10-1"
 source = {
-  url = "https://github.com/dromozoa/dromozoa-tree/archive/v1.9.tar.gz";
-  file = "dromozoa-tree-1.9.tar.gz";
+  url = "https://github.com/dromozoa/dromozoa-tree/archive/v1.10.tar.gz";
+  file = "dromozoa-tree-1.10.tar.gz";
 }
 description = {
   summary = "Tree data structures and algorithms";
