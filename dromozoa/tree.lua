@@ -66,6 +66,14 @@ function class:each_node(key)
   end
 end
 
+function class:count_node(key)
+  if key == nil then
+    return self.model:count_node()
+  else
+    return self.props:count_item(key)
+  end
+end
+
 function class:clear_node_properties(key)
   self.props:clear(key)
 end
