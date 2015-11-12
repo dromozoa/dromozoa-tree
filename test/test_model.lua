@@ -21,23 +21,20 @@ local model = require "dromozoa.tree.model"
 
 local t = model()
 
-local root = t:create_node()
 local n1 = t:create_node()
 local n2 = t:create_node()
 local n3 = t:create_node()
 local n4 = t:create_node()
 local n5 = t:create_node()
 local n6 = t:create_node()
+local n7 = t:create_node()
 
-t:append_child(root, n1)
-t:append_child(root, n2)
-t:append_child(root, n3)
-t:append_child(root, n4)
-assert(t:count_children(root) == 4)
+t:append_child(n1, n2)
+t:append_child(n1, n3)
+t:append_child(n1, n4)
+t:append_child(n1, n5)
+assert(t:count_children(n1) == 4)
 
-t:append_child(n1, t:create_node())
-t:append_child(n1, t:create_node())
-assert(t:count_children(n1) == 2)
 t:append_child(n2, t:create_node())
 t:append_child(n2, t:create_node())
 assert(t:count_children(n2) == 2)
@@ -47,35 +44,38 @@ assert(t:count_children(n3) == 2)
 t:append_child(n4, t:create_node())
 t:append_child(n4, t:create_node())
 assert(t:count_children(n4) == 2)
+t:append_child(n5, t:create_node())
+t:append_child(n5, t:create_node())
+assert(t:count_children(n5) == 2)
 
-t:remove_node(n3)
-assert(t:count_children(root) == 3)
+t:remove_node(n4)
+assert(t:count_children(n1) == 3)
 
 local data = sequence()
-for v in t:each_child(root) do
+for v in t:each_child(n1) do
   data:push(v)
 end
-assert(equal(data, { n1, n2, n4 }))
+assert(equal(data, { n2, n3, n5 }))
 
-assert(t:parent_node(n2) == root)
-assert(t:next_sibling_node(n2) == n4)
-assert(t:prev_sibling_node(n2) == n1)
+assert(t:parent_node(n3) == n1)
+assert(t:next_sibling_node(n3) == n5)
+assert(t:prev_sibling_node(n3) == n2)
 
-t:insert_sibling(n2, n5)
+t:insert_sibling(n3, n6)
 local data = sequence()
-for v in t:each_child(root) do
+for v in t:each_child(n1) do
   data:push(v)
 end
-assert(equal(data, { n1, n5, n2, n4 }))
+assert(equal(data, { n2, n6, n3, n5 }))
 
-t:insert_sibling(n1, n6)
+t:insert_sibling(n2, n7)
 local data = sequence()
-for v in t:each_child(root) do
+for v in t:each_child(n1) do
   data:push(v)
 end
-assert(equal(data, { n6, n1, n5, n2, n4 }))
+assert(equal(data, { n7, n2, n6, n3, n5 }))
 
-t:delete_node(n3)
+t:delete_node(n4)
 
 local m = 0
 local n = 0
