@@ -21,49 +21,49 @@ local tree = require "dromozoa.tree"
 
 local t = tree()
 
-local root = t:create_node()
 local n1 = t:create_node()
 local n2 = t:create_node()
 local n3 = t:create_node()
 local n4 = t:create_node()
 local n5 = t:create_node()
+local n6 = t:create_node()
 
-root:append_child(n1)
-root:append_child(n2)
-root:append_child(n3)
-assert(root:count_children() == 3)
+n1:append_child(n2)
+n1:append_child(n3)
+n1:append_child(n4)
+assert(n1:count_children() == 3)
 
-assert(n2:parent().id == root.id)
-assert(n2:next_sibling().id == n3.id)
-assert(n2:prev_sibling().id == n1.id)
+assert(n3:parent().id == n1.id)
+assert(n3:next_sibling().id == n4.id)
+assert(n3:prev_sibling().id == n2.id)
 
-n3:insert_sibling(n4)
-n1:insert_sibling(n5)
+n4:insert_sibling(n5)
+n2:insert_sibling(n6)
 local data = sequence()
-for u in root:each_child() do
+for u in n1:each_child() do
   data:push(u.id)
 end
-assert(equal(data, { n5.id, n1.id, n2.id, n4.id, n3.id }))
+assert(equal(data, { n6.id, n2.id, n3.id, n5.id, n4.id }))
 
-n2:remove()
+n3:remove()
 local data = sequence()
-for u in root:each_child() do
+for u in n1:each_child() do
   data:push(u.id)
 end
-assert(equal(data, { n5.id, n1.id, n4.id, n3.id }))
+assert(equal(data, { n6.id, n2.id, n5.id, n4.id }))
 
-n5:remove()
+n6:remove()
 local data = sequence()
-for u in root:each_child() do
+for u in n1:each_child() do
   data:push(u.id)
 end
-assert(equal(data, { n1.id, n4.id, n3.id }))
+assert(equal(data, { n2.id, n5.id, n4.id }))
 
-n4:append_child(n5)
+n5:append_child(n6)
 
-assert(n5:parent():parent().id == root.id)
+assert(n6:parent():parent().id == n1.id)
 
-n2:delete()
+n3:delete()
 
 local m = 0
 local n = 0
@@ -71,73 +71,73 @@ for u in t:each_node() do
   m = m + u.id
   n = n + 1
 end
-assert(m == root.id + n1.id + n3.id + n4.id + n5.id)
+assert(m == n1.id + n2.id + n4.id + n5.id + n6.id)
 assert(n == 5)
 
-root.level = 1
-root.root = true
-n1.level = 2
-n3.level = 2
+n1.level = 1
+n1.n1 = true
+n2.level = 2
 n4.level = 2
-n5.level = 3
+n5.level = 2
+n6.level = 3
 
 local n = 0
-for u in t:each_node("root") do
-  assert(u.id == root.id)
+for u in t:each_node("n1") do
+  assert(u.id == n1.id)
   assert(u.level == 1)
   n = n + 1
 end
 assert(n == 1)
 
 local t = tree()
-local n1 = t:create_node()
-local n2 = n1:tree():create_node():append_child(n1)
-n1:append_child():append_child():append_child()
-n1:insert_sibling():insert_sibling():insert_sibling()
+local n2 = t:create_node()
+local n3 = n2:tree():create_node():append_child(n2)
+n2:append_child():append_child():append_child()
+n2:insert_sibling():insert_sibling():insert_sibling()
 
 local t = tree()
-local n1 = t:create_node()
-n1.foo = 17
-n1.bar = 23
-n1.baz = 37
-n1.qux = 42
+local n2 = t:create_node()
+n2.foo = 17
+n2.bar = 23
+n2.baz = 37
+n2.qux = 42
 
 local m = 0
 local n = 0
-for k, v in n1:each_property() do
+for k, v in n2:each_property() do
   m = m + v
   n = n + 1
 end
 assert(m == 17 + 23 + 37 + 42)
 assert(n == 4)
 
-local root = tree():create_node()
-local n1 = root:append_child()
-local n2 = root:append_child()
-local n3 = root:append_child()
-assert(root:count_children() == 3)
-local children = root:children()
+local n1 = tree():create_node()
+local n2 = n1:append_child()
+local n3 = n1:append_child()
+local n4 = n1:append_child()
+assert(n1:count_children() == 3)
+local children = n1:children()
 assert(#children == 3)
-assert(children[1].id == n1.id)
-assert(children[2].id == n2.id)
-assert(children[3].id == n3.id)
+assert(children[1].id == n2.id)
+assert(children[2].id == n3.id)
+assert(children[3].id == n4.id)
 
-assert(root:is_root())
-assert(not n1:is_root())
+assert(n1:is_root())
 assert(not n2:is_root())
 assert(not n3:is_root())
+assert(not n4:is_root())
 
-assert(not root:is_leaf())
-assert(n1:is_leaf())
+assert(not n1:is_leaf())
 assert(n2:is_leaf())
 assert(n3:is_leaf())
+assert(n4:is_leaf())
 
-assert(not root:is_first_child())
-assert(n1:is_first_child())
-assert(not n2:is_first_child())
+assert(not n1:is_first_child())
+assert(n2:is_first_child())
 assert(not n3:is_first_child())
+assert(not n4:is_first_child())
 
-assert(not root:is_last_child())
 assert(not n1:is_last_child())
 assert(not n2:is_last_child())
-assert(n3:is_last_child())
+assert(not n3:is_last_child())
+assert(n4:is_last_child())

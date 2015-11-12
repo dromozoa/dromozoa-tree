@@ -15,8 +15,6 @@
 -- You should have received a copy of the GNU General Public License
 -- along with dromozoa-tree.  If not, see <http://www.gnu.org/licenses/>.
 
-local equal = require "dromozoa.commons.equal"
-local sequence = require "dromozoa.commons.sequence"
 local tree = require "dromozoa.tree"
 
 local t = tree()
@@ -24,23 +22,23 @@ local n1 = t:create_node()
 local n2 = t:create_node()
 local n3 = t:create_node()
 local n4 = t:create_node()
-local n5 = t:create_node()
-local n6 = t:create_node()
+
+n3.color = 1
+n4.color = 2
 
 n1:append_child(n2)
-n1:append_child(n3)
-n1:append_child(n4)
-n3:append_child(n5)
-n3:append_child(n6)
+n2:append_child(n3)
+n2:append_child(n4)
 
-n3.color = true
-n3:collapse()
-assert(n3.color == true)
-n3:delete()
-assert(n3.color == nil)
+local n5, map = n2:duplicate()
 
-local data = sequence()
-for u in n1:each_child() do
-  data:push(u.id)
-end
-assert(equal(data, { n2.id, n5.id, n6.id, n4.id }))
+n1:append_child(n5)
+
+local children = n5:children()
+assert(#children == 2)
+local n6 = children[1]
+local n7 = children[2]
+assert(map[n3.id] == n6.id)
+assert(map[n4.id] == n7.id)
+assert(n6.color == 1)
+assert(n7.color == 2)

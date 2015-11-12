@@ -15,6 +15,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with dromozoa-tree.  If not, see <http://www.gnu.org/licenses/>.
 
+local clone = require "dromozoa.commons.clone"
 local sequence = require "dromozoa.commons.sequence"
 local bfs = require "dromozoa.tree.bfs"
 local dfs = require "dromozoa.tree.dfs"
@@ -152,9 +153,26 @@ function class:dfs(visitor)
   dfs(tree, visitor, self)
 end
 
+function class:duplicate()
+  local uid, model, props, tree = unpack_item(self)
+  local map = {}
+  dfs(model, {
+    discover_node = function (_, a)
+      local b = tree:create_node()
+      map[a.id] = b.id
+      for k, v in a:each_property() do
+        b[clone(k)] = clone(v)
+      end
+    end;
+    finish_edge = function (_, a, b)
+      model:append_child(map[a.id], map[b.id])
+    end;
+  }, self)
+  return tree:get_node(map[uid]), map
+end
+
 function class:collapse()
-  local children = self:children()
-  for u in children:each() do
+  for u in self:each_child() do
     self:insert_sibling(u:remove())
   end
   return self:remove()
