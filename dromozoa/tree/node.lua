@@ -42,8 +42,18 @@ function class:tree()
   return tree
 end
 
-function class:delete()
+function class:delete(hierarchy)
   local uid, model, props, tree = unpack_item(self)
+  if hierarchy then
+    dfs(model, {
+      finish_node = function (_, u)
+        local uid = u.id
+        model:remove_node(uid)
+        model:delete_node(uid)
+        props:remove_item(uid)
+      end;
+    }, self)
+  end
   model:delete_node(uid)
   props:remove_item(uid)
 end
