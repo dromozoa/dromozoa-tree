@@ -16,6 +16,7 @@
 -- along with dromozoa-tree.  If not, see <http://www.gnu.org/licenses/>.
 
 local property_map = require "dromozoa.commons.property_map"
+local push = require "dromozoa.commons.push"
 local dfs = require "dromozoa.tree.dfs"
 local graphviz = require "dromozoa.tree.graphviz"
 local model = require "dromozoa.tree.model"
@@ -50,8 +51,10 @@ function class:empty()
   return self.model:empty()
 end
 
-function class:create_node()
-  return node(self, self.model:create_node())
+function class:create_node(...)
+  local u = node(self, self.model:create_node())
+  push(u, 0, ...)
+  return u
 end
 
 function class:get_node(u)
