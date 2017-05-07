@@ -43,37 +43,35 @@ end
 local function write(out, tree, visitor)
   out:write("digraph g {\n")
   if visitor == nil then
-    for u in tree:each_node() do
-      if u:is_isolated() then
-        out:write(u.id, ";\n")
-      end
-    end
-    for v in tree:each_node() do
-      local u = v:parent()
-      if u ~= nil then
+    tree:dfs({
+      discover_node = function (_, u)
+        if u:is_isolated() then
+          out:write(u.id, ";\n")
+        end
+      end;
+      examine_edge = function (_, u, v)
         out:write(u.id, " -> ", v.id, ";\n")
-      end
-    end
+      end;
+    })
   else
     write_attributes(out, visit(visitor, "graph_attributes"), "graph", ";\n")
     write_attributes(out, visit(visitor, "default_node_attributes"), "node", ";\n")
-    for u in tree:each_node() do
-      local attributes = visit(visitor, "node_attributes", u)
-      if attributes ~= nil or u:is_isolated() then
-        out:write(u.id)
-        write_attributes(out, attributes)
-        out:write(";\n")
-      end
-    end
     write_attributes(out, visit(visitor, "default_edge_attributes"), "edge", ";\n")
-    for v in tree:each_node() do
-      local u = v:parent()
-      if u ~= nil then
+    tree:dfs({
+      discover_node = function (_, u)
+        local attributes = visit(visitor, "node_attributes", u)
+        if attributes ~= nil or u:is_isolated() then
+          out:write(u.id)
+          write_attributes(out, attributes)
+          out:write(";\n")
+        end
+      end;
+      examine_edge = function (_, u, v)
         out:write(u.id, " -> ", v.id)
         write_attributes(out, visit(visitor, "edge_attributes", u, v), "edge", ";\n")
         out:write(";\n")
-      end
-    end
+      end;
+    })
   end
   out:write("}\n")
   return out
